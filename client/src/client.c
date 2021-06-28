@@ -57,4 +57,5 @@ int main(int argc, char * argv[])
 		}
 	}
 	close(sfd);
+	return 0;
 }
