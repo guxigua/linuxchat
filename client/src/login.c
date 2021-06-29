@@ -9,7 +9,13 @@ int login_status(char *account,char *passwd, int cfd)
 
 	if(write(cfd, &login_data, sizeof(login_data)) == -1)
 		return 1;
-	return 0;
+	memset(&login_data, 0, sizeof(struct send_data));
+	while(1){
+		if(read(cfd, &login_data, sizeof(struct send_data)) > 0)
+			if(login_data.action == 1 && login_data.data[0] == 'y')
+				return 0;
+	}
+	return 1;
 }
 
 int connect_status(const char *ip, unsigned short port)

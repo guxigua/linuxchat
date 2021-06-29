@@ -1,7 +1,7 @@
 #include "include/function.h"
 
 #define SIP 	"192.168.0.139"
-#define SPORT	5006
+#define SPORT	5000
 
 /**
  * 动作：(0-99)
@@ -33,9 +33,10 @@ int main(int argc, char * argv[])
 
 	/*登入*/
 	int ret = login_status(argv[1], argv[2], sfd);
-	if(!ret){
+	if(!ret)
+		printf("login successful!\n");
+	else
 		printf("the account or passwd is error\n");
-	}
 
 	while(i)
 	{
