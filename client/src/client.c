@@ -38,6 +38,7 @@ int main(int argc, char * argv[])
 	else
 		printf("the account or passwd is error\n");
 
+	/*
 	while(i)
 	{
 		printf("2:发送信息\n3:查看信息\n4:退出\n");
@@ -57,6 +58,8 @@ int main(int argc, char * argv[])
 
 		}
 	}
+	*/
+	while(1);
 	close(sfd);
 	return 0;
 }

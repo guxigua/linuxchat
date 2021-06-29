@@ -83,13 +83,16 @@ int recv_connect()
 	if( bind(sfd, (struct sockaddr *)&server_message,
 				sizeof(server_message)) == -1)
 		return -2;
+	printf("bind is successful\n");
 
 	if((listen(sfd, 50)) == -1)
 		return -3;
+	printf("listen is successful\n");
 
 
 	if((acc_fd = accept(sfd, NULL, NULL)) == -1)
 		return -4;
+	printf("accept is successful\n");
 
 	return acc_fd;
 }
@@ -104,4 +107,5 @@ void *deal_with(void *args)
 			local_action(&user_data, &tmp);
 		}
 	}
+	return NULL;
 }

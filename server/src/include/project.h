@@ -32,8 +32,8 @@ struct user_info
         int sfd;
         char account[11];
         char status;
-	struct user_info *next;
 	pthread_t  pid_t;
+	struct user_info *next;
 };
 /*用户信息*/
 
