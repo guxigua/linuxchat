@@ -38,7 +38,7 @@ struct user_info
 /*用户信息*/
 
 
-int recv_connect();
+int recv_connect(int sfd);
 /* return value:
  *
  * value > 0 : successful

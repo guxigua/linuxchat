@@ -36,6 +36,7 @@ void local_action_login(struct send_data *data,struct user_info **info)
 				temp.data[0] = 'n';
 				temp.action = 1;
 				write((*info)->sfd, &temp, sizeof(struct send_data));
+				printf("the %s is login\n", sqlrow[0]);
                 }
                 mysql_free_result(res_ptr);
         }
@@ -68,9 +69,8 @@ void local_action(struct send_data *data, struct user_info **info)
  */
 
 
-int recv_connect()
+int recv_connect(int sfd)
 {
-	int sfd	=	socket(AF_INET, SOCK_STREAM, 0);
 	int acc_fd;
 	if(sfd == -1)
 		return -1;
@@ -80,14 +80,6 @@ int recv_connect()
 	server_message.sin_port	       = htons(SPORT);
 	server_message.sin_addr.s_addr = inet_addr(SIP);
 
-	if( bind(sfd, (struct sockaddr *)&server_message,
-				sizeof(server_message)) == -1)
-		return -2;
-	printf("bind is successful\n");
-
-	if((listen(sfd, 50)) == -1)
-		return -3;
-	printf("listen is successful\n");
 
 
 	if((acc_fd = accept(sfd, NULL, NULL)) == -1)
