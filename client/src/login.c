@@ -57,3 +57,10 @@ int send_mess(int cfd, char *account)
 		return 1;
 	return 0;
 }
+
+int login_out(int cfd)
+{
+	struct send_data tmp;
+	tmp.action = 4;
+	return write(cfd, &tmp, sizeof(struct send_data)) == -1 ?  -1 : 0;
+}

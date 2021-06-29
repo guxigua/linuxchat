@@ -5,6 +5,7 @@ int main()
 	struct user_info *head = NULL;
 	struct user_info *tail = NULL;
 	struct user_info *tmp = NULL;
+	struct user_info *quit_sfd =  NULL;
 
 	int sfd =       socket(AF_INET, SOCK_STREAM, 0);
         struct sockaddr_in server_message;
@@ -29,7 +30,7 @@ int main()
 		}
 		if( (tmp->sfd = recv_connect(sfd)) < 0)
 			continue;
-		pthread_create(&(tail->pid_t), NULL, deal_with, tail);
+		 quit_sfd = pthread_create(&(tail->pid_t), NULL, deal_with, tail);
 	}
 	return 0;
 }

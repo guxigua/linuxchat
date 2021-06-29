@@ -80,8 +80,6 @@ int recv_connect(int sfd)
 	server_message.sin_port	       = htons(SPORT);
 	server_message.sin_addr.s_addr = inet_addr(SIP);
 
-
-
 	if((acc_fd = accept(sfd, NULL, NULL)) == -1)
 		return -4;
 	printf("accept is successful\n");
@@ -96,6 +94,10 @@ void *deal_with(void *args)
 	while(1){
 		memset(&user_data, 0, sizeof(struct send_data));
 		if(read(tmp->sfd, &user_data, sizeof(struct send_data)) > 0){
+			if(user_data->action == 4){
+				tmp->sfd = -1;
+				return args;
+			}
 			local_action(&user_data, &tmp);
 		}
 	}

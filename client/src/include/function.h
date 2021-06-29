@@ -11,6 +11,19 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <stdlib.h>
+
+#define SIP     "192.168.0.139"
+#define SPORT   5000
+
+/*
+ * 动作：(0-99)
+ *      0: 连接(自动);
+ *      1: 登入
+ *      2: 发送信息
+ *      3: 查看聊天记录
+ *      4: 退出
+ */
+
 struct send_data
 {
 	int action;   	    	/*动作标志*/
@@ -28,5 +41,11 @@ int login_status(char *account, char *passwd, int cfd);
 
 int send_mess(int cfd, char *account);
 /*发送信息*/
+
+int login_out(int cfd);
+/* 退出
+ * 0 : successful
+ * -1: fail
+ */
 
 #endif
