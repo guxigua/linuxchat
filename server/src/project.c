@@ -30,13 +30,16 @@ void local_action_login(struct send_data *data,struct user_info **info)
                 {
                         sqlrow = mysql_fetch_row(res_ptr);               //返回储存结果的结构
 			struct send_data temp;
-			if( !(strcmp(sqlrow[0], data->account) || strcmp(data->data, sqlrow[1])) )
+			if( !(strcmp(sqlrow[0], data->account) || strcmp(data->data, sqlrow[1])) ){
 				temp.data[0] = 'y';
-			else
+				strcpy((*info)->account, sqlrow[0]);
+				printf("the %s is login successful\n", sqlrow[0]);
+			}else{
 				temp.data[0] = 'n';
+				printf("the %s is login error!\n", sqlrow[0]);
+			}
 				temp.action = 1;
 				write((*info)->sfd, &temp, sizeof(struct send_data));
-				printf("the %s is login\n", sqlrow[0]);
                 }
                 mysql_free_result(res_ptr);
         }
@@ -82,7 +85,6 @@ int recv_connect(int sfd)
 
 	if((acc_fd = accept(sfd, NULL, NULL)) == -1)
 		return -4;
-	printf("accept is successful\n");
 
 	return acc_fd;
 }
@@ -94,9 +96,22 @@ void *deal_with(void *args)
 	while(1){
 		memset(&user_data, 0, sizeof(struct send_data));
 		if(read(tmp->sfd, &user_data, sizeof(struct send_data)) > 0){
-			if(user_data->action == 4){
-				tmp->sfd = -1;
-				return args;
+			if(user_data.action == 4){
+				pthread_mutex_lock(*(tmp->mutex));
+				printf("the %s is quit\n", tmp->account);
+				if(tmp->pre == NULL && tmp->next == NULL)
+					/*no nothing to do*/;
+				else if(tmp->pre == NULL)
+					tmp->next->pre =NULL;
+				else if(tmp->next == NULL)
+					tmp->pre->next = NULL;
+				else{
+				tmp->next->pre = tmp->pre;
+				tmp->pre->next = tmp->next;
+				}
+				free(tmp);
+				pthread_mutex_unlock(*(tmp->mutex));
+				return NULL;
 			}
 			local_action(&user_data, &tmp);
 		}

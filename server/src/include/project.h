@@ -33,6 +33,8 @@ struct user_info
         char account[11];
         char status;
 	pthread_t  pid_t;
+	pthread_mutex_t **mutex;
+	struct user_info *pre;
 	struct user_info *next;
 };
 /*用户信息*/
