@@ -45,7 +45,10 @@ void local_action_login(struct send_data *data,struct user_info **info)
         }
 }
 
-void local_action_forward(){}
+void local_action_forward(struct send_data *data, struct user_info **info)
+{
+	pthread_mutex();
+}
 void local_action(struct send_data *data, struct user_info **info)
 {
 	switch(data->action){
@@ -57,7 +60,7 @@ void local_action(struct send_data *data, struct user_info **info)
 		break;
 		/*登入*/
 	case 2:
-		local_action_forward();
+		local_action_forward(data, info);
 		break;
 		/*发送信息*/
 	case 3:
@@ -96,7 +99,7 @@ void *deal_with(void *args)
 	while(1){
 		memset(&user_data, 0, sizeof(struct send_data));
 		if(read(tmp->sfd, &user_data, sizeof(struct send_data)) > 0){
-			if(user_data.action == 4){
+			if(user_data.action == 4){  				/*从信息链表中删除自己的节点*/
 				pthread_mutex_lock(*(tmp->mutex));
 				printf("the %s is quit\n", tmp->account);
 				if(tmp->pre == NULL && tmp->next == NULL)
@@ -117,4 +120,13 @@ void *deal_with(void *args)
 		}
 	}
 	return NULL;
+}
+
+void close_fun(int signo)
+{
+        if(SIGINT == signo)
+        {
+		printf("\nbye!\n");
+                exit(0);
+        }
 }

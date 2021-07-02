@@ -34,6 +34,7 @@ struct user_info
         char status;
 	pthread_t  pid_t;
 	pthread_mutex_t **mutex;
+	pthread_mutex_t *mutexrw;
 	struct user_info *pre;
 	struct user_info *next;
 };
@@ -52,7 +53,9 @@ int recv_connect(int sfd);
  */
 
 void *deal_with(void *args);
+/*监听到客户端后处理函数*/
 
-
+void close_fun(int signo);
+/*ctrl-c信号处理函数*/
 
 #endif

@@ -2,8 +2,12 @@
 
 int main()
 {
-	pthread_mutex_t  *mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+	signal(SIGINT, close_fun);
+	pthread_mutex_t  *mutex   = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_t  *mutexrw = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(mutex, NULL);
+	pthread_mutex_init(mutexrw, NULL);
+
 	struct user_info *head = NULL;
 	struct user_info *tail = NULL;
 	struct user_info *tmp = NULL;
@@ -22,7 +26,6 @@ int main()
 			printf("listen error\n");
 	int i=1;
 	int sfd_tmp=0;
-	int  ret_pthread=0;
 
 	while(1){
 		if( (sfd_tmp = recv_connect(sfd)) < 0)
@@ -32,6 +35,7 @@ int main()
 			head->pre   = NULL;
 			head->next  = NULL;
 			head->mutex = &mutex;
+			head->mutexrw = mutexrw;
 			head->sfd   = sfd_tmp;
 			tmp  = tail = head;
 		}else{
@@ -41,12 +45,12 @@ int main()
 			tmp->sfd   = sfd_tmp;
 			tmp->pre   = tail;
 			tmp->mutex = &mutex;
+			tmp->mutexrw = mutexrw;
 			tail->next = tmp;
 			tail       = tmp;
 			pthread_mutex_unlock(mutex);
 		}
-		int pthread = pthread_create(&(tail->pid_t), NULL, deal_with, tail);
-		if()
+		pthread_create(&(tail->pid_t), NULL, deal_with, tail);
 	}
 	return 0;
 }
