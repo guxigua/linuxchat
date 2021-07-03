@@ -13,7 +13,7 @@ int main(int argc, char * argv[])
 
 	/*连接*/
 	cfd = connect_status(SIP, SPORT);
-	if(!sfd){
+	if(!cfd){
                 printf("\nconnect is fail, Is about to quit\n");
                 return 1;
         }
@@ -27,14 +27,18 @@ int main(int argc, char * argv[])
 			mar[0] = 0;
 			break;
 		case '1':
-			ret = login_in(argv[1], argv[2], cfd);
+			ret = login_action(argv[1], argv[2], cfd, 'i');
 			if(ret < 0)
 				printf("login in fail\n");
 			else
 				printf("login successful\n");
 			break;
 		case '2':
-			login_out(cfd);
+			ret = login_action(NULL, NULL, cfd, 'o');
+			if(ret < 0)
+				printf("login out fail\n");
+			else
+				printf("login out successful\n");
 			break;
 		case '3':
 			send_mess();
@@ -45,4 +49,5 @@ int main(int argc, char * argv[])
 		}
 	}
 	close(cfd);
+	return 0;
 }

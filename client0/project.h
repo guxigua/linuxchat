@@ -21,14 +21,16 @@ struct mess{
 	char data[256];   /* main data				           */
 };
 
+int login_action(char *obj_act, char *passwd, int cfd, char action);
+/* action: 'i': login in, 'o': login out
+ * 
+ * 成功返回值0, 失败返回值 < 0*/
 
-int login_in(char *obj_act, char *passwd, int cfd);
-/* 登入, 成功返回值0, 失败返回值 < 0*/
+int connect_status(const char *ip, unsigned short port);
+/*连接状态*/
 
-int login_out(int cfd);
-/* 退出登入, 成功返回0, 失败返回值 < 0*/
 
-int send_mess(){}
+void send_mess();
 
 
 #endif

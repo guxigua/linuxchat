@@ -22,12 +22,16 @@ int connect_status(const char *ip, unsigned short port)
         return cfd;
 }
 
-int login_in(char *obj_act, char *passwd, int cfd)
+int login_action(char *obj_act, char *passwd, int cfd, char action)
 {
 	struct mess tmp;
-	tmp.action = 1;
-	strcpy(tmp.obj_act, obj_act);
-	strcpy(tmp.data, passwd);
+	if(action == 'i'){
+		tmp.action = 1;
+		strcpy(tmp.obj_act, obj_act);
+		strcpy(tmp.data, passwd);
+	}else{
+		tmp.action = 2;
+	}
 
 	int lcsize = write(cfd, &tmp, sizeof(struct mess));
 	if(lcsize  == -1)
@@ -37,11 +41,10 @@ int login_in(char *obj_act, char *passwd, int cfd)
 	if(lcsize == -1)
 		return -2;
 
-	/*如果账号密码正确，那么data里面第一个字符为y*/
-	if(tmp.action == 1 && tmp.data[0] == 'y') 
+	/*如果成功，那么data里面第一个字符为y*/
+	if((tmp.action == 1 || tmp.action == 2) && tmp.data[0] == 'y') 
 		return 0;
 	else
 		return -3;
 }
-
-int login_out(int cfd);
+void send_mess(){}
