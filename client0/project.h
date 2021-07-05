@@ -1,5 +1,6 @@
 #ifndef PROJECT_H_
 #define PROJECT_H_
+#include <pthread.h>
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
@@ -29,6 +30,8 @@ int login_action(char *obj_act, char *passwd, int cfd, char action);
 int connect_status(const char *ip, unsigned short port);
 /*连接状态*/
 
+void *recv_svr(void *cfd);
+/*接受服务器数据现线程函数*/
 
 void send_mess();
 

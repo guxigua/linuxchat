@@ -36,15 +36,47 @@ int login_action(char *obj_act, char *passwd, int cfd, char action)
 	int lcsize = write(cfd, &tmp, sizeof(struct mess));
 	if(lcsize  == -1)
 		return -1;
+	return 0;
 
-	lcsize == read(cfd, &tmp, sizeof(struct mess));
-	if(lcsize == -1)
-		return -2;
-
-	/*如果成功，那么data里面第一个字符为y*/
-	if((tmp.action == 1 || tmp.action == 2) && tmp.data[0] == 'y') 
-		return 0;
-	else
-		return -3;
 }
+void *recv_svr(void *cfd)
+{
+	struct mess localms;
+	int *fd = (int*)cfd;
+	int cotrd = 0;
+
+	while(1){
+		cotrd = read(*fd, &localms, sizeof(struct mess));
+		if(cotrd  ==  -1){
+			perror("Read failure");
+		}else{
+			switch(localms.action){
+			case 1:{
+				if(localms.data[0] == 'y')
+					printf("\nLogin successful\n");
+				else
+					printf("\nlogin failed\n");
+				break;
+				}
+			case 2:{
+					if(localms.data[0] == 'y')
+					printf("\nLogin out successful\n");
+				else
+					printf("\nlogin out failed\n");
+				break;
+				}
+			case 3:{
+				printf("\n%s sent a message to you,\
+					       	the content is \n");
+				break;
+			       }
+			default:{
+			       break;
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
 void send_mess(){}

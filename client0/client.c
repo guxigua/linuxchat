@@ -2,9 +2,10 @@
 
 int main(int argc, char * argv[])
 {
-	char mar[16]="1";
+	char mar[16]="1";   
 	int cfd;
 	int ret;
+	pthread_t tid;
 
 	if(argc != 3){
 		printf("Enter the account and password for termail");
@@ -17,6 +18,11 @@ int main(int argc, char * argv[])
                 printf("\nconnect is fail, Is about to quit\n");
                 return 1;
         }
+
+	if(pthread_create(&tid, NULL, recv_svr, &cfd)){
+		printf("Thread creation failed\n");
+		return 1;
+	}
 	
 
 	while(mar[0]){
